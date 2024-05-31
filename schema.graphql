@@ -1,6 +1,6 @@
 type LOANClaimed @entity(immutable: true) {
   id: Bytes!
-  loanId: BigInt! # uint256
+  loan: Loan!
   defaulted: Boolean! # bool
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -9,7 +9,7 @@ type LOANClaimed @entity(immutable: true) {
 
 type LOANCreated @entity(immutable: true) {
   id: Bytes!
-  loanId: BigInt! # uint256
+  loan: Loan!
   terms_lender: Bytes! # address
   terms_borrower: Bytes! # address
   terms_expiration: BigInt! # uint40
@@ -31,7 +31,7 @@ type LOANCreated @entity(immutable: true) {
 
 type LOANExpirationDateExtended @entity(immutable: true) {
   id: Bytes!
-  loanId: BigInt! # uint256
+  loan: Loan! # uint256
   extendedExpirationDate: BigInt! # uint40
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -40,45 +40,58 @@ type LOANExpirationDateExtended @entity(immutable: true) {
 
 type LOANPaidBack @entity(immutable: true) {
   id: Bytes!
-  loanId: BigInt! # uint256
+  loan: Loan! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type VaultPull @entity(immutable: true) {
+type Token @entity {
+  " token address "
   id: Bytes!
-  asset_category: Int! # uint8
-  asset_assetAddress: Bytes! # address
-  asset_id: BigInt! # uint256
-  asset_amount: BigInt! # uint256
-  origin: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  " token name "
+  name: String!
+  " token symbol "
+  symbol: String!
+  " token decimals "
+  decimals: Int!
 }
 
-type VaultPush @entity(immutable: true) {
+type Asset @entity {
+  " asset address "
   id: Bytes!
-  asset_category: Int! # uint8
-  asset_assetAddress: Bytes! # address
-  asset_id: BigInt! # uint256
-  asset_amount: BigInt! # uint256
-  beneficiary: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  " asset category "
+  category: AssetCategory!
+  " token metadata if ERC20 "
+  token: Token
 }
 
-type VaultPushFrom @entity(immutable: true) {
-  id: Bytes!
-  asset_category: Int! # uint8
-  asset_assetAddress: Bytes! # address
-  asset_id: BigInt! # uint256
-  asset_amount: BigInt! # uint256
-  origin: Bytes! # address
-  beneficiary: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum AssetCategory {
+  ERC20
+  ERC721
+  ERC1155
+  CryptoKitties
+}
+
+type Loan @entity {
+  " loan id "
+  id: ID!
+  " loan borrower "
+  borrower: Bytes!
+  " loan lender "
+  lender: Bytes!
+  " loan expiration "
+  expiration: BigInt!
+  " loan collateral asset "
+  collateral: Asset! 
+  " loan collateral asset amount "
+  collateralAmount: BigInt!
+  " loan collateral token id if NFT "
+  collateralTokenId: BigInt
+  " loan desired asset "
+  desiredAsset: Asset!
+  " loan desired asset amount "
+  desiredAmount: BigInt!
+  " loan repay amount "
+  repayAmount: BigInt!
 }

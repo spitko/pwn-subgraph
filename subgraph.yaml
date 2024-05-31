@@ -15,17 +15,12 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      entities:
-        - LOANClaimed
-        - LOANCreated
-        - LOANExpirationDateExtended
-        - LOANPaidBack
-        - VaultPull
-        - VaultPush
-        - VaultPushFrom
+      entities: []
       abis:
         - name: PWNSimpleLoan
           file: ./abis/PWNSimpleLoan.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: LOANClaimed(indexed uint256,indexed bool)
           handler: handleLOANClaimed
@@ -35,10 +30,4 @@ dataSources:
           handler: handleLOANExpirationDateExtended
         - event: LOANPaidBack(indexed uint256)
           handler: handleLOANPaidBack
-        - event: VaultPull((uint8,address,uint256,uint256),indexed address)
-          handler: handleVaultPull
-        - event: VaultPush((uint8,address,uint256,uint256),indexed address)
-          handler: handleVaultPush
-        - event: VaultPushFrom((uint8,address,uint256,uint256),indexed address,indexed address)
-          handler: handleVaultPushFrom
-      file: ./src/pwn-simple-loan.ts
+      file: ./src/mappings/PWNSimpleLoan.ts
