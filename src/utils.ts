@@ -1,7 +1,8 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { Asset, Loan, Token } from "../generated/schema";
 import { ERC20 } from "../generated/PWNSimpleLoan/ERC20";
 import { LOANCreated } from "../generated/PWNSimpleLoan/PWNSimpleLoan";
+import { BIGINT_ZERO, bigIntToBigDecimal } from "./numbers";
 
 export function getOrCreateToken(id: Bytes): Token {
   let token = Token.load(id);
@@ -30,14 +31,18 @@ export function createNewLoanFromEvent(event: LOANCreated): Loan {
     event.params.terms.collateral.category,
     event.params.terms.collateral.assetAddress
   ).id;
-  loan.collateralAmount = event.params.terms.collateral.amount;
-  loan.collateralTokenId = event.params.terms.collateral.id;
-  loan.desiredAsset = getOrCreateAsset(
+  if (event.params.terms.collateral.amount.gt(BIGINT_ZERO)) {
+    loan.collateralAmount = event.params.terms.collateral.amount;
+  } else {
+    loan.collateralTokenId = event.params.terms.collateral.id;
+  }
+  loan.borrowAsset = getOrCreateAsset(
     event.params.terms.asset.category,
     event.params.terms.asset.assetAddress
   ).id;
-  loan.desiredAmount = event.params.terms.asset.amount;
-  loan.repayAmount = event.params.terms.loanRepayAmount;
+  const borrowToken = getOrCreateToken(event.params.terms.asset.assetAddress);
+  loan.borrowAmount = bigIntToBigDecimal(event.params.terms.asset.amount, borrowToken.decimals);
+  loan.repayAmount = bigIntToBigDecimal(event.params.terms.loanRepayAmount, borrowToken.decimals);
   loan.save();
   return loan;
 }
@@ -71,3 +76,4 @@ function getAssetCategory(category: i32): string {
       return "Unknown";
   }
 }
+

@@ -85,13 +85,13 @@ type Loan @entity {
   " loan collateral asset "
   collateral: Asset! 
   " loan collateral asset amount "
-  collateralAmount: BigInt!
+  collateralAmount: BigInt
   " loan collateral token id if NFT "
   collateralTokenId: BigInt
-  " loan desired asset "
-  desiredAsset: Asset!
-  " loan desired asset amount "
-  desiredAmount: BigInt!
+  " loan borrow asset "
+  borrowAsset: Asset!
+  " loan borrow asset amount "
+  borrowAmount: BigDecimal!
   " loan repay amount "
-  repayAmount: BigInt!
+  repayAmount: BigDecimal!
 }
