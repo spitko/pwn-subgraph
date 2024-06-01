@@ -25,6 +25,7 @@ export function getLoan(id: BigInt): Loan {
 
 export function createNewLoanFromEvent(event: LOANCreated): Loan {
   let loan = new Loan(event.params.loanId.toString());
+  loan.createdDate = event.block.timestamp;
   const borrower = getOrCreateAccount(event.params.terms.borrower)
   borrower.totalBorrowedLoans = borrower.totalBorrowedLoans.plus(BIGINT_ONE);
   loan.borrower = borrower.id;

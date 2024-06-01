@@ -123,6 +123,8 @@ type Loan @entity {
   loanExpirationDateExtendedEvents: [LoanExpirationDateExtendedEvent!]! @derivedFrom(field: "loan")
   " loan status "
   status: LoanStatus!
+  " created date (timestamp) "
+  createdDate: BigInt!
   " repaid date (timestamp)"
   repaidDate: BigInt
 }
