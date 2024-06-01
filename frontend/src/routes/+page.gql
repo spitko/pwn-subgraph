@@ -1,0 +1,40 @@
+query Loans {
+  loans(orderBy: createdDate, orderDirection: desc) {
+    id
+    borrower {
+      id
+    }
+    lender {
+      id
+    }
+    expiration
+    status
+    collateral {
+      id
+      category
+      token {
+        name
+        symbol
+        decimals
+      }
+    }
+    collateralAmount
+    collateralTokenId
+    borrowAsset {
+      id
+      category
+      token {
+        name
+        symbol
+        decimals
+      }
+    }
+    loanPaidBackEvents {
+      transactionHash
+    }
+    borrowAmount
+    repayAmount
+    createdDate
+    repaidDate
+  }
+}
