@@ -1,0 +1,8 @@
+{
+  "mainnet": {
+    "PWNSimpleLoanSimpleRequest": {
+      "address": "0x9Cb87eC6448299aBc326F32d60E191Ef32Ab225D",
+      "startBlock": 17677232
+    }
+  }
+}
