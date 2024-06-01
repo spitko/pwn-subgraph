@@ -1,8 +1,0 @@
-type RequestMade @entity(immutable: true) {
-  id: Bytes!
-  requestHash: Bytes! # bytes32
-  borrower: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}

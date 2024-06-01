@@ -1,8 +1,8 @@
-import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
-import { Asset, Loan, Token } from "../generated/schema";
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Account, Asset, Loan, Token } from "../generated/schema";
 import { ERC20 } from "../generated/PWNSimpleLoan/ERC20";
 import { LOANCreated } from "../generated/PWNSimpleLoan/PWNSimpleLoan";
-import { BIGINT_ZERO, bigIntToBigDecimal } from "./numbers";
+import { BIGINT_ONE, BIGINT_ZERO, bigIntToBigDecimal } from "./numbers";
 import { AssetCategory, LoanStatus } from "./constants";
 
 export function getOrCreateToken(id: Bytes): Token {
@@ -25,8 +25,14 @@ export function getLoan(id: BigInt): Loan {
 
 export function createNewLoanFromEvent(event: LOANCreated): Loan {
   let loan = new Loan(event.params.loanId.toString());
-  loan.borrower = event.params.terms.borrower;
-  loan.lender = event.params.terms.lender;
+  const borrower = getOrCreateAccount(event.params.terms.borrower)
+  borrower.totalBorrowedLoans = borrower.totalBorrowedLoans.plus(BIGINT_ONE);
+  loan.borrower = borrower.id;
+  borrower.save();
+  const lender = getOrCreateAccount(event.params.terms.lender);
+  lender.totalLendedLoans = lender.totalLendedLoans.plus(BIGINT_ONE);
+  lender.save();
+  loan.lender = lender.id;
   loan.expiration = event.params.terms.expiration;
   loan.collateral = getOrCreateAsset(
     event.params.terms.collateral.category,
@@ -68,6 +74,17 @@ export function getOrCreateAsset(category: i32, assetAddress: Bytes): Asset {
     asset.save();
   }
   return asset;
+}
+
+export function getOrCreateAccount(id: Bytes): Account {
+  let account = Account.load(id);
+  if (account == null) {
+    account = new Account(id);
+    account.totalBorrowedLoans = BIGINT_ZERO;
+    account.totalLendedLoans = BIGINT_ZERO;
+    account.save();
+  }
+  return account;
 }
 
 function getAssetCategory(category: i32): string {

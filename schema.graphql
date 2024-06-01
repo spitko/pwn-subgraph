@@ -66,6 +66,19 @@ type Asset @entity {
   token: Token
 }
 
+type Account @entity {
+  " account address "
+  id: Bytes!
+  " loans borrowed "
+  borrowed: [Loan!]! @derivedFrom(field: "borrower")
+  " loans lent "
+  lended: [Loan!]! @derivedFrom(field: "lender")
+  " total loans borrowed "
+  totalBorrowedLoans: BigInt!
+  " total loans lent "
+  totalLendedLoans: BigInt!
+}
+
 enum AssetCategory {
   ERC20
   ERC721
@@ -83,9 +96,9 @@ type Loan @entity {
   " loan id "
   id: ID!
   " loan borrower "
-  borrower: Bytes!
+  borrower: Account!
   " loan lender "
-  lender: Bytes!
+  lender: Account!
   " loan expiration "
   expiration: BigInt!
   " loan collateral asset "
