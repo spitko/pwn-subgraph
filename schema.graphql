@@ -73,6 +73,12 @@ enum AssetCategory {
   CryptoKitties
 }
 
+enum LoanStatus {
+  RUNNING
+  DEFAULTED
+  REPAID
+}
+
 type Loan @entity {
   " loan id "
   id: ID!
@@ -102,4 +108,8 @@ type Loan @entity {
   loanPaidBackEvents: [LoanPaidBackEvent!]! @derivedFrom(field: "loan")
   " loan expiration date extended events "
   loanExpirationDateExtendedEvents: [LoanExpirationDateExtendedEvent!]! @derivedFrom(field: "loan")
+  " loan status "
+  status: LoanStatus!
+  " repaid date (timestamp)"
+  repaidDate: BigInt
 }

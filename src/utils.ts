@@ -3,6 +3,7 @@ import { Asset, Loan, Token } from "../generated/schema";
 import { ERC20 } from "../generated/PWNSimpleLoan/ERC20";
 import { LOANCreated } from "../generated/PWNSimpleLoan/PWNSimpleLoan";
 import { BIGINT_ZERO, bigIntToBigDecimal } from "./numbers";
+import { AssetCategory, LoanStatus } from "./constants";
 
 export function getOrCreateToken(id: Bytes): Token {
   let token = Token.load(id);
@@ -41,8 +42,15 @@ export function createNewLoanFromEvent(event: LOANCreated): Loan {
     event.params.terms.asset.assetAddress
   ).id;
   const borrowToken = getOrCreateToken(event.params.terms.asset.assetAddress);
-  loan.borrowAmount = bigIntToBigDecimal(event.params.terms.asset.amount, borrowToken.decimals);
-  loan.repayAmount = bigIntToBigDecimal(event.params.terms.loanRepayAmount, borrowToken.decimals);
+  loan.borrowAmount = bigIntToBigDecimal(
+    event.params.terms.asset.amount,
+    borrowToken.decimals
+  );
+  loan.repayAmount = bigIntToBigDecimal(
+    event.params.terms.loanRepayAmount,
+    borrowToken.decimals
+  );
+  loan.status = LoanStatus.RUNNING;
   loan.save();
   return loan;
 }
@@ -65,15 +73,14 @@ export function getOrCreateAsset(category: i32, assetAddress: Bytes): Asset {
 function getAssetCategory(category: i32): string {
   switch (category) {
     case 0:
-      return "ERC20";
+      return AssetCategory.ERC20;
     case 1:
-      return "ERC721";
+      return AssetCategory.ERC721;
     case 2:
-      return "ERC1155";
+      return AssetCategory.ERC1155;
     case 3:
-      return "CryptoKitties";
+      return AssetCategory.CryptoKitties;
     default:
       return "Unknown";
   }
 }
-

@@ -10,9 +10,16 @@ import {
   LoanExpirationDateExtendedEvent,
   LoanPaidBackEvent,
 } from "../../generated/schema";
+import { LoanStatus } from "../constants";
 import { createNewLoanFromEvent, getOrCreateAsset, getLoan } from "../utils";
 
 export function handleLOANClaimed(event: LOANClaimed): void {
+  const loan = getLoan(event.params.loanId);
+  if (event.params.defaulted) {
+    loan.status = LoanStatus.DEFAULTED;
+  }
+  loan.save();
+
   let entity = new LoanClaimedEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
@@ -74,6 +81,11 @@ export function handleLOANExpirationDateExtended(
 }
 
 export function handleLOANPaidBack(event: LOANPaidBack): void {
+  const loan = getLoan(event.params.loanId);
+  loan.status = LoanStatus.REPAID;
+  loan.repaidDate = event.block.timestamp;
+  loan.save();
+
   let entity = new LoanPaidBackEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
