@@ -1,4 +1,4 @@
-type LOANClaimed @entity(immutable: true) {
+type LoanClaimedEvent @entity(immutable: true) {
   id: Bytes!
   loan: Loan!
   defaulted: Boolean! # bool
@@ -7,7 +7,7 @@ type LOANClaimed @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type LOANCreated @entity(immutable: true) {
+type LoanCreatedEvent @entity(immutable: true) {
   id: Bytes!
   loan: Loan!
   terms_lender: Bytes! # address
@@ -29,7 +29,7 @@ type LOANCreated @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type LOANExpirationDateExtended @entity(immutable: true) {
+type LoanExpirationDateExtendedEvent @entity(immutable: true) {
   id: Bytes!
   loan: Loan! # uint256
   extendedExpirationDate: BigInt! # uint40
@@ -38,7 +38,7 @@ type LOANExpirationDateExtended @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type LOANPaidBack @entity(immutable: true) {
+type LoanPaidBackEvent @entity(immutable: true) {
   id: Bytes!
   loan: Loan! # uint256
   blockNumber: BigInt!
@@ -94,4 +94,12 @@ type Loan @entity {
   borrowAmount: BigDecimal!
   " loan repay amount "
   repayAmount: BigDecimal!
+  " loan claimed events "
+  loanClaimedEvents: [LoanClaimedEvent!]! @derivedFrom(field: "loan")
+    " loan claimed events "
+  loanCreatedEvents: [LoanCreatedEvent!]! @derivedFrom(field: "loan")
+  " loan paid back events "
+  loanPaidBackEvents: [LoanPaidBackEvent!]! @derivedFrom(field: "loan")
+  " loan expiration date extended events "
+  loanExpirationDateExtendedEvents: [LoanExpirationDateExtendedEvent!]! @derivedFrom(field: "loan")
 }

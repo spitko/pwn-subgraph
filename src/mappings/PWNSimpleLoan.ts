@@ -1,19 +1,19 @@
 import {
-  LOANClaimed as LOANClaimedEvent,
-  LOANCreated as LOANCreatedEvent,
-  LOANExpirationDateExtended as LOANExpirationDateExtendedEvent,
-  LOANPaidBack as LOANPaidBackEvent,
+  LOANClaimed as LOANClaimed,
+  LOANCreated as LOANCreated,
+  LOANExpirationDateExtended as LOANExpirationDateExtended,
+  LOANPaidBack as LOANPaidBack,
 } from "../../generated/PWNSimpleLoan/PWNSimpleLoan";
 import {
-  LOANClaimed,
-  LOANCreated,
-  LOANExpirationDateExtended,
-  LOANPaidBack,
+  LoanClaimedEvent,
+  LoanCreatedEvent,
+  LoanExpirationDateExtendedEvent,
+  LoanPaidBackEvent,
 } from "../../generated/schema";
 import { createNewLoanFromEvent, getOrCreateAsset, getLoan } from "../utils";
 
-export function handleLOANClaimed(event: LOANClaimedEvent): void {
-  let entity = new LOANClaimed(
+export function handleLOANClaimed(event: LOANClaimed): void {
+  let entity = new LoanClaimedEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.loan = getLoan(event.params.loanId).id;
@@ -26,8 +26,8 @@ export function handleLOANClaimed(event: LOANClaimedEvent): void {
   entity.save();
 }
 
-export function handleLOANCreated(event: LOANCreatedEvent): void {
-  let entity = new LOANCreated(
+export function handleLOANCreated(event: LOANCreated): void {
+  let entity = new LoanCreatedEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.loan = createNewLoanFromEvent(event).id;
@@ -54,13 +54,13 @@ export function handleLOANCreated(event: LOANCreatedEvent): void {
 }
 
 export function handleLOANExpirationDateExtended(
-  event: LOANExpirationDateExtendedEvent
+  event: LOANExpirationDateExtended
 ): void {
   const loan = getLoan(event.params.loanId);
   loan.expiration = event.params.extendedExpirationDate;
   loan.save();
 
-  let entity = new LOANExpirationDateExtended(
+  let entity = new LoanExpirationDateExtendedEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.loan = loan.id;
@@ -73,8 +73,8 @@ export function handleLOANExpirationDateExtended(
   entity.save();
 }
 
-export function handleLOANPaidBack(event: LOANPaidBackEvent): void {
-  let entity = new LOANPaidBack(
+export function handleLOANPaidBack(event: LOANPaidBack): void {
+  let entity = new LoanPaidBackEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.loan = getLoan(event.params.loanId).id;
