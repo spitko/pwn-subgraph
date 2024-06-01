@@ -37,4 +37,16 @@ query Loans {
     createdDate
     repaidDate
   }
+
+  mostBorrowed: accounts(orderBy: totalBorrowedLoans, orderDirection: desc) {
+    id
+    totalLendedLoans
+    totalBorrowedLoans
+  }
+
+  mostLended: accounts(orderBy: totalLendedLoans, orderDirection: desc) {
+    id
+    totalLendedLoans
+    totalBorrowedLoans
+  }
 }
