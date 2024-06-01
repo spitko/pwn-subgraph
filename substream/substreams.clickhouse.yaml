@@ -46,3 +46,14 @@ modules:
       type: proto:sf.substreams.entity.v1.EntityChanges
 
 network: mainnet
+
+sink:
+  module: db_out
+  type: sf.substreams.sink.sql.v1.Service
+  config:
+    schema: "./schema.clickhouse.sql"
+    engine: clickhouse
+    postgraphile_frontend:
+      enabled: false
+    rest_frontend:
+      enabled: false

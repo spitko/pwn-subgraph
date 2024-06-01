@@ -1,5 +1,2 @@
-*.spkg
 target/
-.idea
-src/pb/
-node_modules/
+pwn-v0.1.0.spkg

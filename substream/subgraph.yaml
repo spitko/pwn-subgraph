@@ -1,16 +1,17 @@
-specVersion: 0.0.4
-description: Ethereum Contract Tracking Subgraph (powered by Substreams)
-repository: https://github.com/graphprotocol/graph-tooling
+specVersion: 0.0.6
+description: pwn substreams based subgraph
+repository: # fill in with git remote url
 schema:
-  file: schema.graphql
+  file: ./schema.graphql
+
 dataSources:
   - kind: substreams
-    name: substream_test
+    name: pwn
     network: mainnet
     source:
       package:
         moduleName: graph_out
-        file: substreams-test-v1.0.1.spkg
+        file: pwn-v0.1.0.spkg
     mapping:
       kind: substreams/graph-entities
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6

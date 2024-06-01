@@ -1,9 +1,61 @@
-type Contract @entity {
-  id: ID!
-
-  "The timestamp when the contract was deployed"
-  timestamp: String!
-
-  "The block number of the contract deployment"
-  blockNumber: BigInt!
+type pwnsimpleloan_loan_claimed @entity {
+    id: ID!
+    evt_tx_hash: String!
+    evt_index: BigInt!
+    evt_block_time: String!
+    evt_block_number: BigInt!
+    defaulted: Boolean!
+    loan_id: BigDecimal!
+}
+type pwnsimpleloan_loan_created @entity {
+    id: ID!
+    evt_tx_hash: String!
+    evt_index: BigInt!
+    evt_block_time: String!
+    evt_block_number: BigInt!
+    factory_address: String!
+    factory_data_hash: String!
+    loan_id: BigDecimal!
+}
+type pwnsimpleloan_loan_expiration_date_extended @entity {
+    id: ID!
+    evt_tx_hash: String!
+    evt_index: BigInt!
+    evt_block_time: String!
+    evt_block_number: BigInt!
+    extended_expiration_date: Int!
+    loan_id: BigDecimal!
+}
+type pwnsimpleloan_loan_paid_back @entity {
+    id: ID!
+    evt_tx_hash: String!
+    evt_index: BigInt!
+    evt_block_time: String!
+    evt_block_number: BigInt!
+    loan_id: BigDecimal!
+}
+type pwnsimpleloan_vault_pull @entity {
+    id: ID!
+    evt_tx_hash: String!
+    evt_index: BigInt!
+    evt_block_time: String!
+    evt_block_number: BigInt!
+    origin: String!
+}
+type pwnsimpleloan_vault_push @entity {
+    id: ID!
+    evt_tx_hash: String!
+    evt_index: BigInt!
+    evt_block_time: String!
+    evt_block_number: BigInt!
+    beneficiary: String!
+}
+type pwnsimpleloan_vault_push_from @entity {
+    id: ID!
+    evt_tx_hash: String!
+    evt_index: BigInt!
+    evt_block_time: String!
+    evt_block_number: BigInt!
+    beneficiary: String!
+    origin: String!
 }

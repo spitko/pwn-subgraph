@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package contract.v1;
+
+message Events {
+    repeated pwnsimpleloan_LoanClaimed pwnsimpleloan_loan_claimeds = 1;
+    repeated pwnsimpleloan_LoanCreated pwnsimpleloan_loan_createds = 2;
+    repeated pwnsimpleloan_LoanExpirationDateExtended pwnsimpleloan_loan_expiration_date_extendeds = 3;
+    repeated pwnsimpleloan_LoanPaidBack pwnsimpleloan_loan_paid_backs = 4;
+    repeated pwnsimpleloan_VaultPull pwnsimpleloan_vault_pulls = 5;
+    repeated pwnsimpleloan_VaultPush pwnsimpleloan_vault_pushes = 6;
+    repeated pwnsimpleloan_VaultPushFrom pwnsimpleloan_vault_push_froms = 7;
+}
+
+message pwnsimpleloan_LoanClaimed {
+    string evt_tx_hash = 1;
+    uint32 evt_index = 2;
+    google.protobuf.Timestamp evt_block_time = 3;
+    uint64 evt_block_number = 4;
+    string loan_id = 5;
+    bool defaulted = 6;
+}
+
+message pwnsimpleloan_LoanCreated {
+    string evt_tx_hash = 1;
+    uint32 evt_index = 2;
+    google.protobuf.Timestamp evt_block_time = 3;
+    uint64 evt_block_number = 4;
+    string loan_id = 5;
+    bytes factory_data_hash = 6;
+    bytes factory_address = 7;
+}
+
+message pwnsimpleloan_LoanExpirationDateExtended {
+    string evt_tx_hash = 1;
+    uint32 evt_index = 2;
+    google.protobuf.Timestamp evt_block_time = 3;
+    uint64 evt_block_number = 4;
+    string loan_id = 5;
+    uint64 extended_expiration_date = 6;
+}
+
+message pwnsimpleloan_LoanPaidBack {
+    string evt_tx_hash = 1;
+    uint32 evt_index = 2;
+    google.protobuf.Timestamp evt_block_time = 3;
+    uint64 evt_block_number = 4;
+    string loan_id = 5;
+}
+
+message pwnsimpleloan_VaultPull {
+    string evt_tx_hash = 1;
+    uint32 evt_index = 2;
+    google.protobuf.Timestamp evt_block_time = 3;
+    uint64 evt_block_number = 4;
+    bytes origin = 5;
+}
+
+message pwnsimpleloan_VaultPush {
+    string evt_tx_hash = 1;
+    uint32 evt_index = 2;
+    google.protobuf.Timestamp evt_block_time = 3;
+    uint64 evt_block_number = 4;
+    bytes beneficiary = 5;
+}
+
+message pwnsimpleloan_VaultPushFrom {
+    string evt_tx_hash = 1;
+    uint32 evt_index = 2;
+    google.protobuf.Timestamp evt_block_time = 3;
+    uint64 evt_block_number = 4;
+    bytes origin = 5;
+    bytes beneficiary = 6;
+}
