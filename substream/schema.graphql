@@ -23,7 +23,7 @@ type pwnsimpleloan_loan_expiration_date_extended @entity {
     evt_index: BigInt!
     evt_block_time: String!
     evt_block_number: BigInt!
-    extended_expiration_date: Int!
+    extended_expiration_date: BigInt!
     loan_id: BigDecimal!
 }
 type pwnsimpleloan_loan_paid_back @entity {
